@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:note/database/note_database.dart';
+import 'package:note/screens/all_notes_page.dart';
 
 class CreateNotePage extends StatelessWidget {
-  final String name; // Add a field to hold the name
+  final String name;
 
   const CreateNotePage({super.key, required this.name});
 
@@ -10,7 +12,6 @@ class CreateNotePage extends StatelessWidget {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController messageController = TextEditingController();
 
-    // Split the name to get the first and last name initials
     List<String> nameParts = name.split(' ');
     String initials = '';
     if (nameParts.isNotEmpty) {
@@ -21,9 +22,9 @@ class CreateNotePage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFF3A3D3A),
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xFF3A3D3A),
         automaticallyImplyLeading: false,
         title: Row(
           children: [
@@ -79,8 +80,18 @@ class CreateNotePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    // Handle the add action
+                  onPressed: () async {
+                    final noteDatabase = NoteDatabase();
+                    await noteDatabase.insertNote({
+                      'title': titleController.text,
+                      'content': messageController.text,
+                    });
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllNotesPage(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -92,9 +103,7 @@ class CreateNotePage extends StatelessWidget {
                 const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
-                    // Handle the cancel action
-                    Navigator.pop(
-                        context); // Navigate back to the previous screen
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,

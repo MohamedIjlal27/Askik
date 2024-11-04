@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
     final TextEditingController nameController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFF3A3D3A),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
