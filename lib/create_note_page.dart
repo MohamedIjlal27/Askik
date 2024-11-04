@@ -3,18 +3,28 @@ import 'package:flutter/material.dart';
 class CreateNotePage extends StatelessWidget {
   final String name; // Add a field to hold the name
 
-  const CreateNotePage(
-      {super.key, required this.name}); // Accept name in the constructor
+  const CreateNotePage({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController messageController = TextEditingController();
 
+    // Split the name to get the first and last name initials
+    List<String> nameParts = name.split(' ');
+    String initials = '';
+    if (nameParts.isNotEmpty) {
+      initials += nameParts[0][0]; // First letter of the first name
+      if (nameParts.length > 1) {
+        initials += nameParts[1][0]; // First letter of the last name
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
+        automaticallyImplyLeading: false,
         title: Row(
           children: [
             Image.asset(
@@ -22,16 +32,17 @@ class CreateNotePage extends StatelessWidget {
               height: 40,
             ),
             const SizedBox(width: 10),
-            Text('Create Note for $name',
-                style:
-                    const TextStyle(color: Colors.white)), // Display the name
+            const Text(
+              'Create Note',
+              style: TextStyle(color: Colors.white),
+            ),
           ],
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
-              child: const Text('MA'),
+              child: Text(initials), // Show initials
               backgroundColor: Colors.grey[800],
             ),
           ),
