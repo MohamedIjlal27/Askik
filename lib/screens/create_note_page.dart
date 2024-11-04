@@ -14,9 +14,9 @@ class CreateNotePage extends StatelessWidget {
     List<String> nameParts = name.split(' ');
     String initials = '';
     if (nameParts.isNotEmpty) {
-      initials += nameParts[0][0]; // First letter of the first name
+      initials += nameParts[0][0];
       if (nameParts.length > 1) {
-        initials += nameParts[1][0]; // First letter of the last name
+        initials += nameParts[1][0];
       }
     }
 
@@ -42,7 +42,7 @@ class CreateNotePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
-              child: Text(initials), // Show initials
+              child: Text(initials),
               backgroundColor: Colors.grey[800],
             ),
           ),
@@ -75,18 +75,35 @@ class CreateNotePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle the add action
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle the add action
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
+                  ),
+                  child: const Text('Add'),
                 ),
-                child: const Text('Add'),
-              ),
+                const SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle the cancel action
+                    Navigator.pop(
+                        context); // Navigate back to the previous screen
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
+                  ),
+                  child: const Text('Cancel'),
+                ),
+              ],
             ),
           ],
         ),
