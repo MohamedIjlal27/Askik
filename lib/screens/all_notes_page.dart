@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note/database/note_database.dart';
+import 'package:note/screens/create_note_page.dart';
 
 class AllNotesPage extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _AllNotesPageState extends State<AllNotesPage> {
 
   Future<void> _deleteNote(int id) async {
     await _noteDatabase.deleteNote(id);
-    _loadNotes(); // Refresh the notes after deletion
+    _loadNotes();
   }
 
   @override
@@ -31,11 +32,15 @@ class _AllNotesPageState extends State<AllNotesPage> {
     return Scaffold(
       backgroundColor: Color(0xFF3A3D3A),
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset('assets/logo/logo.png'),
+        ),
         title: const Text('All Notes'),
-        backgroundColor: Color(0xFF3A3D3A),
-        actions: [
+        backgroundColor: const Color(0xFF3A3D3A),
+        actions: const [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: CircleAvatar(
               child: Text('MA'),
               backgroundColor: Color(0xFF3A3D3A),
@@ -77,7 +82,15 @@ class _AllNotesPageState extends State<AllNotesPage> {
                           IconButton(
                             icon: const Icon(Icons.edit, color: Colors.blue),
                             onPressed: () {
-                              // Handle edit action
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CreateNotePage(
+                                    name: 'Your Name',
+                                    note: _notes[index],
+                                  ),
+                                ),
+                              );
                             },
                           ),
                           IconButton(
@@ -95,6 +108,18 @@ class _AllNotesPageState extends State<AllNotesPage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateNotePage(name: 'Your Name'),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.green,
       ),
     );
   }

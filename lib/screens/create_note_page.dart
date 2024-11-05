@@ -4,8 +4,9 @@ import 'package:note/screens/all_notes_page.dart';
 
 class CreateNotePage extends StatelessWidget {
   final String name;
+  final Map<String, dynamic>? note;
 
-  const CreateNotePage({super.key, required this.name});
+  const CreateNotePage({super.key, required this.name, this.note});
 
   @override
   Widget build(BuildContext context) {
@@ -86,12 +87,14 @@ class CreateNotePage extends StatelessWidget {
                       'title': titleController.text,
                       'content': messageController.text,
                     });
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AllNotesPage(),
-                      ),
-                    );
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllNotesPage(),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
