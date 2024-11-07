@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:note/global/user_data.dart';
 import 'create_note_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -64,6 +65,8 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 } else {
+                  UserData().setUserName(nameController.text);
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(

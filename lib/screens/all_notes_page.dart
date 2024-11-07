@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note/database/note_database.dart';
 import 'package:note/screens/create_note_page.dart';
+import 'package:note/global/user_data.dart';
 
 class AllNotesPage extends StatefulWidget {
   @override
@@ -12,6 +13,8 @@ class _AllNotesPageState extends State<AllNotesPage> {
   List<Map<String, dynamic>> _notes = [];
   List<Map<String, dynamic>> _filteredNotes = [];
   final TextEditingController _searchController = TextEditingController();
+  String initials =
+      '${UserData().firstInitial ?? ''}${UserData().lastInitial ?? ''}';
 
   @override
   void initState() {
@@ -58,11 +61,11 @@ class _AllNotesPageState extends State<AllNotesPage> {
         ),
         title: const Text('All Notes'),
         backgroundColor: const Color(0xFF3A3D3A),
-        actions: const [
+        actions: [
           Padding(
             padding: EdgeInsets.all(8.0),
             child: CircleAvatar(
-              child: Text('MA'),
+              child: Text(initials),
               backgroundColor: Color(0xFF3A3D3A),
             ),
           ),

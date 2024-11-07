@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note/database/note_database.dart';
 import 'package:note/screens/all_notes_page.dart';
+import 'package:note/global/user_data.dart';
 
 class CreateNotePage extends StatelessWidget {
   final String name;
@@ -15,14 +16,8 @@ class CreateNotePage extends StatelessWidget {
     final TextEditingController messageController =
         TextEditingController(text: note?['content']);
 
-    List<String> nameParts = name.split(' ');
-    String initials = '';
-    if (nameParts.isNotEmpty) {
-      initials += nameParts[0][0];
-      if (nameParts.length > 1) {
-        initials += nameParts[1][0];
-      }
-    }
+    String initials =
+        '${UserData().firstInitial ?? ''}${UserData().lastInitial ?? ''}';
 
     return Scaffold(
       backgroundColor: Color(0xFF3A3D3A),
@@ -46,7 +41,11 @@ class CreateNotePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
-              child: Text(initials),
+              radius: 20,
+              child: Text(
+                initials.isNotEmpty ? initials : '?',
+                style: TextStyle(color: Colors.white),
+              ),
               backgroundColor: Colors.grey[800],
             ),
           ),
