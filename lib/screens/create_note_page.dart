@@ -10,8 +10,10 @@ class CreateNotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController messageController = TextEditingController();
+    final TextEditingController titleController =
+        TextEditingController(text: note?['title']);
+    final TextEditingController messageController =
+        TextEditingController(text: note?['content']);
 
     List<String> nameParts = name.split(' ');
     String initials = '';
@@ -83,10 +85,20 @@ class CreateNotePage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     final noteDatabase = NoteDatabase();
-                    await noteDatabase.insertNote({
-                      'title': titleController.text,
-                      'content': messageController.text,
-                    });
+                    if (note != null) {
+                      // Update existing note
+                      await noteDatabase.updateNote({
+                        'id': note!['id'], // Ensure the ID is included
+                        'title': titleController.text,
+                        'content': messageController.text,
+                      });
+                    } else {
+                      // Insert new note
+                      await noteDatabase.insertNote({
+                        'title': titleController.text,
+                        'content': messageController.text,
+                      });
+                    }
                     if (context.mounted) {
                       Navigator.pushReplacement(
                         context,
@@ -101,7 +113,7 @@ class CreateNotePage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 15),
                   ),
-                  child: const Text('Add'),
+                  child: Text(note != null ? 'Update' : 'Add'),
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(

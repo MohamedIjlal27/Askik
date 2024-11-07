@@ -10,21 +10,41 @@ class AllNotesPage extends StatefulWidget {
 class _AllNotesPageState extends State<AllNotesPage> {
   final NoteDatabase _noteDatabase = NoteDatabase();
   List<Map<String, dynamic>> _notes = [];
+  List<Map<String, dynamic>> _filteredNotes = [];
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _loadNotes();
+    _searchController.addListener(_filterNotes);
   }
 
   Future<void> _loadNotes() async {
     _notes = await _noteDatabase.getNotes();
+    _filteredNotes = _notes;
     setState(() {});
+  }
+
+  void _filterNotes() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredNotes = _notes.where((note) {
+        return note['title'].toLowerCase().contains(query) ||
+            note['content'].toLowerCase().contains(query);
+      }).toList();
+    });
   }
 
   Future<void> _deleteNote(int id) async {
     await _noteDatabase.deleteNote(id);
     _loadNotes();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,8 +73,9 @@ class _AllNotesPageState extends State<AllNotesPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
                 hintText: 'Search...',
                 filled: true,
                 fillColor: Colors.white,
@@ -69,13 +90,13 @@ class _AllNotesPageState extends State<AllNotesPage> {
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
-                itemCount: _notes.length,
+                itemCount: _filteredNotes.length,
                 itemBuilder: (context, index) {
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     child: ListTile(
-                      title: Text(_notes[index]['title']),
-                      subtitle: Text(_notes[index]['content']),
+                      title: Text(_filteredNotes[index]['title']),
+                      subtitle: Text(_filteredNotes[index]['content']),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -87,7 +108,12 @@ class _AllNotesPageState extends State<AllNotesPage> {
                                 MaterialPageRoute(
                                   builder: (context) => CreateNotePage(
                                     name: 'Your Name',
-                                    note: _notes[index],
+                                    note: {
+                                      'id': _filteredNotes[index]['id'],
+                                      'title': _filteredNotes[index]['title'],
+                                      'content': _filteredNotes[index]
+                                          ['content'],
+                                    },
                                   ),
                                 ),
                               );
@@ -96,7 +122,7 @@ class _AllNotesPageState extends State<AllNotesPage> {
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () {
-                              _deleteNote(_notes[index]['id']);
+                              _deleteNote(_filteredNotes[index]['id']);
                             },
                           ),
                         ],
